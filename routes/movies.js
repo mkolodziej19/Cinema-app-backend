@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+const {Movie} = require('../models/movie');
 
 if (!config.get('emailPassword')) {
 	console.error('FATAL ERROR: emailPassword is not defined');
@@ -10,16 +11,15 @@ if (!config.get('emailPassword')) {
 }  
 
 const transporter = nodemailer.createTransport({
+	jsonTransport: true,
 	service: `gmail`,
 	auth: {
 		user: 'km8530278@gmail.com',
-		pass: `m1k23456`
+		pass: `${config.get('emailPassword')}`
 	}
 });
 
 router.post('/', async (req, res) => {
-	const { error } = validate(req.body);
-	if (error) return res.status(400).send(error.details[0].message);
 
 	let movie = await Movie.findOne({ filmId: req.body.filmId });
 	if (movie) return res.status(400).send('Movie already registered.');
@@ -38,20 +38,23 @@ router.post('/', async (req, res) => {
 	
 });
 
-router.put('/:fimlId', async (req, res) => {
-	const { error } = validate(req.body);
-	if (error) return res.status(400).send(error.details[0].message);
+router.put('/:filmId', async (req, res) => {
 
-	let movie = await Movie.findOne({ filmId: req.body.filmId }); // czy zamiast body powinno być params?
+	let oldMovie = await Movie.findOne({ filmId: req.params.filmId });
+
+	const movie = await Movie.findOneAndUpdate({
+		filmId: req.params.filmId,
+		hall: {
+			number: oldMovie.hall.number,
+			seats: req.body.hall.seats
+		}
+	});
+
 	if (!movie) return res.status(400).send("Movie doesn't exist.");
-
-	movie.seats = req.body.seats;
-
-	movie = await movie.save();
 
 	const mailOptions = {
 		from: 'km8530278@gmail.com',
-		to: `${req.body.email}`,
+		to: 'marc1911@gmail.com',//`${req.body.email}`,
 		subject: 'Potwierdzenie rezerwacji',
 		html: `<center><h1>Witaj</h1> <h3>Oto potwierdzenie twojej rezerwacji</h3><h4> Rezerwacja dotyczy seansu: ${req.body.seance}. Zarezerwowane miejsca to ${req.body.reservedSeats}</h4></center>`
 	}
@@ -67,13 +70,13 @@ router.put('/:fimlId', async (req, res) => {
 });
 
 router.get('/:filmId', async (req, res) => {
-	const movie = await Movie.find({ movieId: req.body.filmId }); // czy zamiast body powinno być params?
+	const movie = await Movie.find({ filmId: req.params.filmId }); // czy zamiast body powinno być params?
 	res.send(movie);
 });
 
 router.delete('/:filmId', async (req, res) => {
-	const { error } = validate(req.body);
-	let movie = await Movie.findOne({ filmId: req.body.id}); // czy zamiast body powinno być params?
+//	const { error } = validate(req.body);
+	let movie = await Movie.findOne({ filmId: req.params.id}); // czy zamiast body powinno być params?
 	res.send(movie);
 	await movie.remove();  
 });
