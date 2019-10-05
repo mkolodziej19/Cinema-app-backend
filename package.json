@@ -1,0 +1,23 @@
+{
+  "name": "cinema-app-backend",
+  "version": "1.0.0",
+  "description": "Cinema application - backend",
+  "main": "index.js",
+  "dependencies": {
+    "nodemailer": "^6.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkolodziej19/Cinema-app-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mkolodziej19/Cinema-app-backend/issues"
+  },
+  "homepage": "https://github.com/mkolodziej19/Cinema-app-backend#readme"
+}
