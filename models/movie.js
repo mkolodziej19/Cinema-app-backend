@@ -6,11 +6,10 @@ const movieSchema = new mongoose.Schema({
 		required: true
 	},
 	hall: {
-		number: {
-			type: Number
-		},
+		number: Number,
 		seats: Array
-});
+	}
+})
 
 const Movie = mongoose.model('Movie', movieSchema);
 
