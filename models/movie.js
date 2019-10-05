@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
-	id: {
+	filmId: {
 		type: Number,
 		required: true
 	},
