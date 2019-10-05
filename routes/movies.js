@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-if (!config.get('mailPassword')) {
-	console.error('FATAL ERROR: mailPassword is not defined');
+if (!config.get('emailPassword')) {
+	console.error('FATAL ERROR: emailPassword is not defined');
 	process.exit(1);
 }  
 
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
 			number: req.body.number,
 			seats: req.body.seats
 		}
-	}));
+	});
 
 	movie = await movie.save()
 
@@ -44,7 +44,7 @@ router.put('/:fimlId', async (req, res) => {
 	const { error } = validate(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
 
-	let movie = await Movie.findOne({ filmId: req.body.filmId}); // czy zamiast body powinno być params?
+	let movie = await Movie.findOne({ filmId: req.body.filmId }); // czy zamiast body powinno być params?
 	if (!movie) return res.status(400).send("Movie doesn't exist.");
 
 	movie.seats = req.body.seats;
@@ -69,7 +69,7 @@ router.put('/:fimlId', async (req, res) => {
 });
 
 router.get('/:filmId', async (req, res) => {
-	const movie = await Movie.find(movieId: req.body.filmId}); // czy zamiast body powinno być params?
+	const movie = await Movie.find({ movieId: req.body.filmId }); // czy zamiast body powinno być params?
 	res.send(movie);
 });
 
