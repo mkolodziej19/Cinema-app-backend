@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
 	filmId: {
-		type: Number,
+		type: String,
 		required: true
 	},
 	hall: {
 		number: {
 			type: Number
 		},
-		audience: Array
+		seats: Array
 });
 
 const Movie = mongoose.model('Movie', movieSchema);
