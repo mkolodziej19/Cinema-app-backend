@@ -1,6 +1,23 @@
+const config = require('config');
+const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+
+if (!config.get('mailPassword')) {
+	console.error('FATAL ERROR: mailPassword is not defined');
+	process.exit(1);
+}  
+
+
+
+const transporter = nodemailer.createTransport({
+	service: `gmail`
+	auth: {
+		user: 'km8530278@gmail.com',
+		pass: `${config.get('mailPassword')}` //`m1k23456`
+	}
+});
 
 router.post('/', async (req, res) => {
 	const { error } = validate(req.body);
@@ -33,8 +50,22 @@ router.put('/:fimlId', async (req, res) => {
 	movie.seats = req.body.seats;
 
 	movie = await movie.save();
+
+	const mailOptions = {
+		from: 'km8530278@gmail.com',
+		to: `${req.body.email}`,
+		subject: 'Potwierdzenie rezerwacji',
+		html: `<center><h1>Witaj</h1> <h3>Oto potwierdzenie twojej rezerwacji</h3><h4> Rezerwacja dotyczy seansu: ${req.body.seance}. Zarezerwowane miejsca to ${req.body.reservedSeats}</h4></center>`
+	}
 	
+	transporter.sendMail(mailOptions, function(err, info){
+		if(err) console.log(err)
+		if(info) console.log(info)
+		else console.log('Something bad had happend')
+	});
+
 	res.send(movie);
+
 });
 
 router.get('/:filmId', async (req, res) => {
