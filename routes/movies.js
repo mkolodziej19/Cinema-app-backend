@@ -12,10 +12,10 @@ if (!config.get('mailPassword')) {
 
 
 const transporter = nodemailer.createTransport({
-	service: `gmail`
+	service: `gmail`,
 	auth: {
 		user: 'km8530278@gmail.com',
-		pass: `${config.get('mailPassword')}` //`m1k23456`
+		pass: `${config.get('emailPassword')}`
 	}
 });
 

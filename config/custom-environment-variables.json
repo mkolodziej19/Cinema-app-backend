@@ -1,3 +1,4 @@
 {
-  "emailPassword": "backend_emailPassword"
+  "emailPassword": "backend_emailPassword",
+  "mongoPassword": "backend_mongoPassword"
 }
